@@ -14,10 +14,7 @@ public class Sol02 {
 			intArray[i] = scanner.nextInt();
 			sum += intArray[i];
 		}
-		System.out.print("평균은 ");
-		System.out.print(sum / intArray.length);
-		System.out.print(" 입니다.");
-
+		System.out.print("평균은 " + sum / intArray.length + " 입니다.");
 		scanner.close();
 	}
 }

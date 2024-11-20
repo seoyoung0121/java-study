@@ -18,10 +18,7 @@ public class Sol01 {
 			count = amount / money;
 			amount = amount % money;
 
-			System.out.print(money);
-			System.out.print("원 : ");
-			System.out.print(count);
-			System.out.println("개");
+			System.out.println(money + "원 : " + count + "개");
 		}
 
 		scanner.close();

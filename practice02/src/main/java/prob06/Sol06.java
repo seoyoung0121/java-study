@@ -19,13 +19,10 @@ public class Sol06 {
 			int max = 100;
 			int count = 1;
 			int number = 0;
+
 			while (true) {
-				System.out.print(min);
-				System.out.print("-");
-				System.out.print(max);
-				System.out.print("\n");
-				System.out.print(count++);
-				System.out.print(">>");
+				System.out.println(min + "-" + max);
+				System.out.print(count + ">>");
 				number = scanner.nextInt();
 				if (number == correctNumber) {
 					System.out.println("맞췄습니다.");
@@ -37,6 +34,7 @@ public class Sol06 {
 					System.out.println("더 높게");
 					min = number;
 				}
+				count += 1;
 			}
 			// System.out.println(correctNumber);
 
