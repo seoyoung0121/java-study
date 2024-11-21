@@ -7,7 +7,7 @@ public class TV {
 	private boolean power;
 
 	public TV() {
-		this(0, 0, false);
+		this(1, 0, false);
 	}
 
 	public TV(int channel, int volume, boolean power) {
