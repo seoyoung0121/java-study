@@ -56,6 +56,7 @@ public class TV {
 		} else {
 			this.channel--;
 		}
+		
 		if (this.channel > 225) {
 			this.channel = 1;
 		} else if (this.channel < 1) {
@@ -79,11 +80,11 @@ public class TV {
 		} else {
 			volume--;
 		}
+		
 		if (volume > 100) {
 			this.volume = 0;
 		} else if (volume < 0) {
 			this.volume = 100;
 		}
-
 	}
 }

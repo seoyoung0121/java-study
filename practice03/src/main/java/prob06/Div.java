@@ -10,6 +10,9 @@ public class Div {
 	}
 
 	public int calculate() {
+		if (this.rValue == 0) {
+			return 0; // 일단 0으로 처
+		}
 		return this.lValue / this.rValue;
 	}
 }

@@ -10,8 +10,8 @@ public class GoodsTest {
 
 		Goods[] goods = new Goods[COUNT_GOODS];
 
+		// 상품 입력
 		for (int i = 0; i < COUNT_GOODS; i++) {
-			// 상품 입력
 			String line = scanner.nextLine();
 			String[] info = line.split(" ");
 
