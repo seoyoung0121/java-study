@@ -2,16 +2,19 @@ package prob05;
 
 public class RectTriangle extends Shape {
 
-	@Override
-	public double getArea() {
-		// TODO Auto-generated method stub
-		return 0;
+	public RectTriangle(int width, int height) {
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
-	public double getPerimete() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getArea() {
+		return this.width * this.height * 0.5;
+	}
+
+	@Override
+	public double getPerimeter() {
+		return this.width + this.height + Math.sqrt(this.width * this.width + this.height * this.height);
 	}
 
 }

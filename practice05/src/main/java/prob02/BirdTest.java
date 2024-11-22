@@ -6,7 +6,7 @@ public class BirdTest {
 		bird01.setName("꽥꽥이");
 		bird01.fly();
 		bird01.sing();
-		System.out.println(bird01); //오버라이드하셈toString
+		System.out.println(bird01); 
 
 		Bird bird02 = new Sparrow();
 		bird02.setName("짹짹이");

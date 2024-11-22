@@ -1,28 +1,43 @@
 package prob04;
 
+import java.util.Arrays;
+
 public class MyStack {
 	private int top;
 	private String[] buffer;
 
 	public MyStack(int capacity) {
-		/* 구현하기 */
+		this.top = 0;
+		this.buffer = new String[capacity];
 	}
 
 	public void push(String s) {
-		/* 구현하기 */
+		try {
+			this.buffer[this.top] = s;
+			this.top++;
+		} catch (Exception e) {
+			resize();
+			this.buffer[this.top] = s;
+			this.top++;
+		}
+
 	}
 
 	public String pop() throws MyStackException {
-		/* 구현하기 */
-		return null;
+		if (this.top == 0) {
+			throw new MyStackException();
+		} else {
+			top--;
+			return this.buffer[this.top];
+		}
 	}
 
 	public boolean isEmpty() {
-		/* 구현하기 */
-		return false;
+		return this.top == 0;
 	}
 
 	private void resize() {
-		/* 구현하기 */
-	}	
+		this.buffer = Arrays.copyOf(this.buffer, top + 1);
+
+	}
 }
