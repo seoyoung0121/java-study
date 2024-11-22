@@ -16,7 +16,7 @@ public class ExceptionTest {
 			// e.printStackTrace();
 			// catch 문 비워놓지말고 이거라도 해놓아야함.
 			/* 예외처리 */
-			
+
 			// 1. 로깅
 			System.out.println("error: " + e);
 
@@ -26,7 +26,7 @@ public class ExceptionTest {
 			// 3. 정상종료
 			return;
 		} finally {
-			//예외가 터져서 정상 종료해도 실행됨 
+			// 예외가 터져서 정상 종료해도 실행됨
 			System.out.println("자원정리: ex) close file, socket, db connection");
 		}
 		System.out.println("some code6...");
