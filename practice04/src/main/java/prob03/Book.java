@@ -20,7 +20,7 @@ public class Book {
 
 	public void print() {
 		System.out.println(
-				"책 제목:" + this.title + ", 작가: " + this.author + ", 대여 유무:" + (this.stateCode == 1 ? "재고있음" : "대여중"));
+				"책 제목:" + this.title + ", 작가:" + this.author + ", 대여 유무:" + (this.stateCode == 1 ? "재고있음" : "대여중"));
 	}
 
 }

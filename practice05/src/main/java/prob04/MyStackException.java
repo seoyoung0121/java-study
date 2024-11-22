@@ -2,7 +2,10 @@ package prob04;
 
 @SuppressWarnings("serial")
 public class MyStackException extends Exception {
-	public MyStackException() {
-		super("stack is empty");
+
+	@Override
+	public String toString() {
+		return "Prob04.MyStackException: stack is empty";
 	}
+	
 }
