@@ -55,10 +55,12 @@ public class RequestHandler extends Thread {
 			} else {
 				// methods: POST, DELETE, PUT, HEAD, CONNECT, ...
 				// SimpleHttpServer에서는 무시(400 bad request)
+				File file = new File("./webapp/error/400.html");
+				byte[] body = Files.readAllBytes(file.toPath());
 				outputStream.write( "HTTP/1.1 400 Bad Request\n".getBytes( "UTF-8" ) );
-				outputStream.write( "Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );
+				outputStream.write("Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );
 				outputStream.write( "\n".getBytes() );
-
+				outputStream.write(body);
 			}
 			// 예제 응답입니다.
 			// 서버 시작과 테스트를 마친 후, 주석 처리 합니다.
@@ -91,9 +93,13 @@ public class RequestHandler extends Thread {
 		
 		File file = new File("./webapp" + url);
 		if(!file.exists()) {
+			file = new File("./webapp/error/404.html");
+			byte[] body = Files.readAllBytes(file.toPath());
+			
 			os.write( "HTTP/1.1 404 Not Found\n".getBytes( "UTF-8" ) );
-			os.write( "Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );
+			os.write("Content-Type:text/html; charset=utf-8\r\n".getBytes( "UTF-8" ) );
 			os.write( "\n".getBytes() );
+			os.write(body);
 			return;
 		}
 		
