@@ -36,7 +36,7 @@ public class EchoClient {
 				if ("exit".equals(line)) {
 					break;
 				}
-				pw.println(line);
+				pw.println(line); //print와 달리 flush를 자동으로 해줌 
 
 				String data = br.readLine();
 				if (data == null) {
