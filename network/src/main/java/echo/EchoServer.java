@@ -20,50 +20,12 @@ public class EchoServer {
 
 			serverSocket.bind(new InetSocketAddress("0.0.0.0", PORT));
 			log("starts..[port:" + PORT + "]");
-
-			Socket socket = serverSocket.accept();
-
-			try {
-				InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
-				String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
-				int remotePort = inetRemoteSocketAddress.getPort();
-				log("connected by client [" + remoteHostAddress + ":" + remotePort + "]");
-
-
-				
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true); // true 안하면 안감
-				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
-				//보조스트림에게 byte <-> String 작업 맡김 
-				
-				while (true) {
-
-					String data = br.readLine();
-					if (data == null) {
-						// closed by client
-						log("closed by client");
-						break;
-					}
-
-					log("receive: " + data);
-
-					pw.println(data);
-
-				}
-
-			} catch (SocketException e) {
-				log("Socket Exception: " + e);
-			} catch (IOException e) {
-				log("error: " + e);
-			} finally {
-				try {
-					if (socket != null && !socket.isClosed()) {
-						socket.close();
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
+			
+			while(true) {
+				Socket socket = serverSocket.accept();
+				new EchoRequestHandler(socket).start();
 			}
+			
 		} catch (IOException e) {
 			log("error: " + e);
 		} finally {
