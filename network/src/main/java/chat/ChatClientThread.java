@@ -7,7 +7,7 @@ public class ChatClientThread extends Thread {
 	private BufferedReader br;
 
 	public ChatClientThread(BufferedReader br) {
-		this.br=br;
+		this.br = br;
 	}
 
 	@Override

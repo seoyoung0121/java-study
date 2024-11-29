@@ -24,7 +24,7 @@ public class ChatServer {
 			serverSocket = new ServerSocket();
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
 			serverSocket.bind(new InetSocketAddress("0.0.0.0", PORT));
-			//serverSocket.bind(new InetSocketAddress(hostAddress, PORT));
+			// serverSocket.bind(new InetSocketAddress(hostAddress, PORT));
 			log("연결 기다림 " + hostAddress + ":" + PORT);
 
 			while (true) {

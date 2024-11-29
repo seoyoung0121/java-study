@@ -8,9 +8,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
+import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 public class ChatServerThread extends Thread {
 
@@ -28,10 +27,11 @@ public class ChatServerThread extends Thread {
 		// 1. Remote Host Information
 
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8),true);
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8),
+					true);
 
-			
 			while (true) {
 				String request = br.readLine();
 				if (request == null) {
@@ -61,7 +61,8 @@ public class ChatServerThread extends Thread {
 	}
 
 	private void doJoin(String nickName, Writer writer) {
-		PrintWriter pw = (PrintWriter)writer;
+		nickName = decode(nickName);
+		PrintWriter pw = (PrintWriter) writer;
 		if (" ".equals(nickName)) {
 			pw.println("join:error");
 			pw.flush();
@@ -77,34 +78,39 @@ public class ChatServerThread extends Thread {
 	}
 
 	private void doMessage(String string) {
-		broadcast(nickName + ":" +string);
+		broadcast(nickName + ":" + decode(string));
 	}
 
 	private void doQuit(Writer writer) {
 		removeWriter(writer);
 		broadcast(nickName + "님이 퇴장 하였습니다.");
 	}
-	
-	private void addWriter(Writer writer) {
-	   synchronized(listWriters) {
-	      listWriters.add(writer);
-	   }
-	}
-	private void removeWriter(Writer writer) {
-		synchronized(listWriters) {
-			listWriters.remove(writer);
-	    }
-	}
-	
-	private void broadcast(String data) {
-	   synchronized(listWriters) {
-		   for( Writer writer : listWriters ) {
-				PrintWriter printWriter = (PrintWriter)writer;
-				printWriter.println( data );
-				printWriter.flush();
-		   }
 
-	   }
+	private void addWriter(Writer writer) {
+		synchronized (listWriters) {
+			listWriters.add(writer);
+		}
+	}
+
+	private void removeWriter(Writer writer) {
+		synchronized (listWriters) {
+			listWriters.remove(writer);
+		}
+	}
+
+	private void broadcast(String data) {
+		synchronized (listWriters) {
+			for (Writer writer : listWriters) {
+				PrintWriter printWriter = (PrintWriter) writer;
+				printWriter.println(data);
+				printWriter.flush();
+			}
+
+		}
+	}
+
+	private String decode(String str) {
+		return new String(Base64.getDecoder().decode(str));
 	}
 
 }
