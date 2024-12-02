@@ -14,14 +14,28 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.Base64;
+
+import chat.ChatClient;
+import chat.ChatClientThread;
+import chat.ChatServer;
 
 public class ChatWindow {
-
+	private static final String SERVER_IP = "127.0.0.1";
 	private Frame frame;
 	private Panel pannel;
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
+	private PrintWriter pw;
+	private Socket socket;
 
 	public ChatWindow(String name) {
 		frame = new Frame(name);
@@ -33,6 +47,29 @@ public class ChatWindow {
 
 	public void show() {
 		// 소켓 생성
+		try {
+			socket = new Socket();
+			socket.connect(new InetSocketAddress(SERVER_IP, ChatServer.PORT));
+			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true);
+			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
+
+			pw.println("join:" + encode(frame.getTitle()));
+			String data = br.readLine();
+			String[] tokens = data.split(":");
+			if (!"ok".equals(tokens[1])) {
+				finish(false);
+			} else {
+				new ChatClientThread(br).start();
+			}
+			// 1. 서버 연결 작업
+			// 2. IO Stream Set
+			// 3. join 프로토콜
+			// 4. ChatClientThread 생성
+
+		} catch (IOException e) {
+
+		}
+
 		// Button
 		buttonSend.setBackground(Color.GRAY);
 		buttonSend.setForeground(Color.WHITE);
@@ -51,7 +88,7 @@ public class ChatWindow {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char keyChar = e.getKeyChar();
-				if(keyChar==KeyEvent.VK_ENTER) {
+				if (keyChar == KeyEvent.VK_ENTER) {
 					sendMessage();
 				}
 			}
@@ -76,48 +113,72 @@ public class ChatWindow {
 		frame.setVisible(true);
 		frame.pack();
 
-		// 1. 서버 연결 작업
-		// 2. IO Stream Set
-		// 3. join 프로토콜
-		// 4. ChatClientThread 생성
-
 	}
 
 	private void sendMessage() {
 		String message = textField.getText();
-		System.out.println("message: " + message);
+
+		if (!"".equals(message)) {
+			pw.println("message:" + encode(message));
+		}
+
 		textField.setText("");
 		textField.requestFocus();
-		
+
 	}
-	
+
 	private void updateTextArea(String message) {
 		textArea.append(message);
 		textArea.append("\n");
 	}
-	
+
 	private void finish(boolean socketClosed) {
-		
-		//서버가 죽으면 종료 
-		if(socketClosed) {
-			
-		}
-		//퇴장하였습니다 프로토콜,, quit ok 오면 종료 
-		else {
-			
+		// 서버가 죽으면 그냥 종료
+		if (!socketClosed) {
+			pw.println("quit");
+			try {
+				if (socket != null && !socket.isClosed()) {
+					socket.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.exit(0);
 	}
-	
-	private class ChatClientThread extends Thread{
+
+	private class ChatClientThread extends Thread {
+		private BufferedReader br;
+
+		public ChatClientThread(BufferedReader br) {
+			this.br = br;
+		}
+
 		// 이너클래스로 만들면 updateTextArea 인자 전달 없이 쓸 수 있음
 		@Override
 		public void run() {
-			updateTextArea("dd");
+			try {
+				while (true) {
+					String data = br.readLine();
+					if (data == null) {
+						log("closed by server");
+						finish(true);
+						return;
+					}
+					updateTextArea(data);
+				}
+			} catch (IOException e) {
+				log("error: " + e);
+			}
 		}
 	}
-	
-	
-	
-	
+
+	public static String encode(String str) {
+		return Base64.getEncoder().encodeToString(str.getBytes());
+	}
+
+	public static void log(String message) {
+		System.out.println("[Chat Client] " + message);
+	}
+
 }
