@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -22,9 +21,6 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Base64;
-
-import chat.ChatClient;
-import chat.ChatClientThread;
 import chat.ChatServer;
 
 public class ChatWindow {
@@ -57,6 +53,7 @@ public class ChatWindow {
 			String data = br.readLine();
 			String[] tokens = data.split(":");
 			if (!"ok".equals(tokens[1])) {
+				log("대화명이 잘못되어 종료합니다.");
 				finish(false);
 			} else {
 				new ChatClientThread(br).start();
@@ -67,7 +64,7 @@ public class ChatWindow {
 			// 4. ChatClientThread 생성
 
 		} catch (IOException e) {
-
+			log("error: " + e);
 		}
 
 		// Button
@@ -141,7 +138,7 @@ public class ChatWindow {
 					socket.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				log("error:" + e);
 			}
 		}
 		System.exit(0);
